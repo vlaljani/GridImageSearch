@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.gridimagesearch.R;
+import com.codepath.gridimagesearch.helpers.ImageResultParcelable;
 import com.codepath.gridimagesearch.models.ImageResult;
 import com.squareup.picasso.Picasso;
 
@@ -21,19 +22,19 @@ import java.util.List;
 
 
 
-public class ImageResultsAdapter extends ArrayAdapter<ImageResult> {
+public class ImageResultsAdapter extends ArrayAdapter<ImageResultParcelable> {
 
     private static class ViewHolder {
         ImageView ivSearchRes;
     }
 
-    public ImageResultsAdapter(Context context, List<ImageResult> images) {
+    public ImageResultsAdapter(Context context, List<ImageResultParcelable> images) {
         super(context, R.layout.image_item, images);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageResult imageResult = getItem(position);
+        ImageResultParcelable imageResult = getItem(position);
         ViewHolder viewHolder;
 
         if (convertView == null) {

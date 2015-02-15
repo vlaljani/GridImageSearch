@@ -1,7 +1,11 @@
 package com.codepath.gridimagesearch.net;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.codepath.gridimagesearch.R;
+import com.codepath.gridimagesearch.activities.MainActivity;
+import com.codepath.gridimagesearch.helpers.Constants;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -12,7 +16,9 @@ import com.loopj.android.http.RequestParams;
  * This is a static client for the Instagram REST API
  */
 public class GoogleImgSearchRestClient {
-    private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&rsz=8";
+    private static final String BASE_URL = "https://ajax.googleapis.com/ajax/services/" +
+            "search/images?v=1.0&rsz=" + Constants.RESULT_SIZE;
+
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

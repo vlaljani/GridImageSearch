@@ -14,9 +14,13 @@
     <string name="imgType">Image Type</string>
     <string name="imgSite">Site Filter</string>
     <string name="no_filter">All</string>
+    <string name="share">Share!</string>
+    <string name="img_share_error">Sorry! Could not share this image! Please try another!</string>
+    <string name="internet_error">Please check your internet connection!</string>
+    <string name="generic_error">Something went wrong!</string>
 
     <string-array name="img_sizes">
-        <item>All</item>
+        <item>@string/no_filter</item>
         <item>icon</item>
         <item>small</item>
         <item>medium</item>
@@ -27,7 +31,7 @@
     </string-array>
 
     <string-array name="img_types">
-        <item>All</item>
+        <item>@string/no_filter</item>
         <item>face</item>
         <item>photo</item>
         <item>clipart</item>
@@ -35,7 +39,7 @@
     </string-array>
 
     <string-array name="img_colors">
-        <item>All</item>
+        <item>@string/no_filter</item>
         <item>black</item>
         <item>blue</item>
         <item>brown</item>

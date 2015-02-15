@@ -20,5 +20,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivFullImg"
         android:layout_centerHorizontal="true"/>
+    <ImageView
+        android:id="@+id/ivBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha=".10"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_gsearch"/>
 
 </RelativeLayout>

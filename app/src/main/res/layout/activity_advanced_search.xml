@@ -4,8 +4,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.codepath.gridimagesearch.AdvancedSearchActivity">
+    tools:context="com.codepath.gridimagesearch.activities.AdvancedSearchActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/advfilterbg"
+        android:alpha=".10"/>
 
     <TextView
         android:id="@+id/tvImgSize"
@@ -15,63 +20,121 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/spImgSize"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/spImgSize"
-        android:layout_toRightOf="@+id/tvImgSize"
-        android:layout_alignParentTop="true"
-        android:outlineProvider="bounds"
-        android:spinnerMode="dropdown" />
+        android:layout_below="@+id/tvImgSize"
+        android:spinnerMode="dropdown"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_padding"
+        android:background="@color/transparent_white"
+        android:layout_below="@+id/spImgSize"
+        android:id="@+id/divAboveDiv1"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#80000000"
+        android:layout_below="@+id/divAboveDiv1"
+        android:id="@+id/divAboveImgColor"
+        android:paddingTop="@dimen/divider_padding"
+        android:paddingBottom="@dimen/divider_padding"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_padding"
+        android:background="@color/transparent_white"
+        android:layout_below="@+id/divAboveImgColor"
+        android:id="@+id/divBelowDiv1"
+        />
     <TextView
         android:id="@+id/tvImgColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvImgSize"
-        android:layout_alignBottom="@+id/spImgColor"
-        android:text="@string/imgColor"/>
+        android:layout_below="@+id/divBelowDiv1"
+        android:text="@string/imgColor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
     <Spinner
         android:id="@+id/spImgColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spImgSize"
-        android:layout_toRightOf="@+id/tvImgColor"></Spinner>
+        android:layout_below="@+id/tvImgColor"
+        android:spinnerMode="dropdown"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_padding"
+        android:background="@color/transparent_white"
+        android:layout_below="@+id/spImgColor"
+        android:id="@+id/divAboveDiv2"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#80000000"
+        android:layout_below="@+id/divAboveDiv2"
+        android:id="@+id/divAboveImgType"
+        android:paddingTop="@dimen/divider_padding"
+        android:paddingBottom="@dimen/divider_padding"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_padding"
+        android:background="@color/transparent_white"
+        android:layout_below="@+id/divAboveImgType"
+        android:id="@+id/divBelowDiv2"/>
     <TextView
         android:id="@+id/tvImgType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvImgColor"
-        android:layout_alignBottom="@+id/spImgType"
-        android:text="@string/imgType"/>
+        android:layout_below="@+id/divBelowDiv2"
+        android:text="@string/imgType"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
     <Spinner
         android:id="@+id/spImgType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/spImgColor"
-        android:layout_toRightOf="@+id/tvImgType"></Spinner>
+        android:layout_below="@+id/tvImgType"
+        android:spinnerMode="dropdown"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_padding"
+        android:background="@color/transparent_white"
+        android:layout_below="@+id/spImgType"
+        android:id="@+id/divAboveDiv3"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#80000000"
+        android:layout_below="@+id/divAboveDiv3"
+        android:id="@+id/divAboveImgSite"
+        android:paddingTop="@dimen/divider_padding"
+        android:paddingBottom="@dimen/divider_padding"/>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/divider_padding"
+        android:background="@color/transparent_white"
+        android:layout_below="@+id/divAboveImgSite"
+        android:id="@+id/divBelowDiv3"/>
     <TextView
         android:id="@+id/tvImgSite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvImgType"
-        android:layout_alignBottom="@+id/etImgSite"
-        android:text="@string/imgSite"/>
+        android:layout_below="@+id/divBelowDiv3"
+        android:text="@string/imgSite"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
     <EditText
         android:id="@+id/etImgSite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tvImgSite"
-        android:layout_below="@+id/spImgType"/>
+        android:layout_below="@+id/tvImgSite"/>
     <Button
         android:id="@+id/btnSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/tvImgSite"
+        android:layout_below="@+id/etImgSite"
         android:text="@string/search"
         android:onClick="onImageSearch"/>
 </RelativeLayout>

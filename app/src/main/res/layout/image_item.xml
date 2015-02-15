@@ -7,8 +7,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:scaleType="fitXY"
+        android:scaleType="centerInside"
+        android:paddingBottom="@dimen/image_padding_bottom"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         />
+    <!--<View
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="#80818181"
+        android:layout_below="@+id/ivSearchRes"
+        android:id="@+id/divBelowImg"
+        android:paddingTop="@dimen/divider_padding"
+        android:paddingBottom="@dimen/divider_padding"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:layout_alignLeft="@+id/ivSearchRes"
+        android:layout_alignRight="@+id/ivSearchRes"/>-->
+
 
 
 </RelativeLayout>
