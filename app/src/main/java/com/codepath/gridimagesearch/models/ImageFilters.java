@@ -6,6 +6,9 @@ import java.io.Serializable;
 
 /**
  * Created by vibhalaljani on 2/14/15.
+ *
+ * This class is no longer being used because it's been replaced by its Parcelable version
+ * because Serializable is not good for performance
  */
 public class ImageFilters implements Serializable {
     private String size;
@@ -24,16 +27,16 @@ public class ImageFilters implements Serializable {
         StringBuilder filter_query = new StringBuilder();
         filter_query.append("");
         if (size != null) {
-            filter_query.append(Constants.appender + Constants.imgSizeKey + size);
+            filter_query.append(Constants.appender).append(Constants.imgSizeKey).append(size);
         }
         if (color != null) {
-            filter_query.append(Constants.appender + Constants.imgColorKey + color);
+            filter_query.append(Constants.appender).append(Constants.imgColorKey).append(color);
         }
         if (type != null) {
-            filter_query.append(Constants.appender + Constants.imgTypeKey + type);
+            filter_query.append(Constants.appender).append(Constants.imgTypeKey).append(type);
         }
         if (site != null) {
-            filter_query.append(Constants.appender + Constants.imgSiteKey + site);
+            filter_query.append(Constants.appender).append(Constants.imgSiteKey).append(site);
         }
         return filter_query.toString();
     }

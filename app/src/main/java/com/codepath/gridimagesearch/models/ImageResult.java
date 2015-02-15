@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 /**
  * Created by vibhalaljani on 2/11/15.
+ *
+ * This class is no longer being used because there is a Parcelable version for it
+ * because Serializable is not good for performance.
  */
 public class ImageResult implements Serializable {
     private String url;

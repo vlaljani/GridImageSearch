@@ -3,10 +3,10 @@ package com.codepath.gridimagesearch.helpers;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.codepath.gridimagesearch.models.ImageFilters;
-
 /**
  * Created by vibhalaljani on 2/14/15.
+ *
+ * Parcelable for ImageFilters so they can be passed around in intents and bundles
  */
 public class ImageFiltersParcelable implements Parcelable {
 
@@ -56,18 +56,18 @@ public class ImageFiltersParcelable implements Parcelable {
 
     public String getQuery() {
         StringBuilder filter_query = new StringBuilder();
-        filter_query.append("");
+        filter_query.append(Constants.emptyStr);
         if (size != null) {
-            filter_query.append(Constants.appender + Constants.imgSizeKey + size);
+            filter_query.append(Constants.appender).append(Constants.imgSizeKey).append(size);
         }
         if (color != null) {
-            filter_query.append(Constants.appender + Constants.imgColorKey + color);
+            filter_query.append(Constants.appender).append(Constants.imgColorKey).append(color);
         }
         if (type != null) {
-            filter_query.append(Constants.appender + Constants.imgTypeKey + type);
+            filter_query.append(Constants.appender).append(Constants.imgTypeKey).append(type);
         }
         if (site != null) {
-            filter_query.append(Constants.appender + Constants.imgSiteKey + site);
+            filter_query.append(Constants.appender).append(Constants.imgSiteKey).append(site);
         }
         return filter_query.toString();
     }

@@ -1,26 +1,29 @@
-package com.codepath.gridimagesearch.activities;
+package com.codepath.gridimagesearch.fragments;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.helpers.Constants;
 import com.codepath.gridimagesearch.helpers.ImageFiltersParcelable;
 
-/*
- * This activity is actually not used anymore because it was replaced with a lightweight modal
- * overlay.
- */
-public class AdvancedSearchActivity extends ActionBarActivity {
 
+/**
+ * Created by vibhalaljani on 2/15/15.
+ *
+ * Fragment dialog for advanced search
+ */
+public class AdvSearchDialog extends DialogFragment {
     private Spinner spImgSize;
     private Spinner spImgColor;
     private Spinner spImgType;
@@ -32,35 +35,72 @@ public class AdvancedSearchActivity extends ActionBarActivity {
 
     private ImageFiltersParcelable filters;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_advanced_search);
-
-        ImageFiltersParcelable main_activity_filters = getIntent().
-                getParcelableExtra(Constants.inFilters);
-        filters = new ImageFiltersParcelable();
-        filters.copyFilters(main_activity_filters);
-
-        setupViews();
+    public AdvSearchDialog() {
+        // Empty constructor required for DialogFragment
     }
 
-    // Set up the Spinners, adapters, and the current selection on the spinners, if any.
-    private void setupViews() {
+    public interface AdvSearchDialogListener {
+        void onFinishAdvSearchDialog(ImageFiltersParcelable newFilters);
+    }
+
+    public static AdvSearchDialog newInstance(ImageFiltersParcelable inFilters) {
+
+        AdvSearchDialog frag = new AdvSearchDialog();
+
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.inFilters, inFilters);
+
+        frag.setArguments(args);
+
+        return frag;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_advanced_search, container);
+        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setupViews(view);
+        return view;
+    }
+
+    private void setupViews(View view) {
 
 
         // Find views
-        spImgSize = (Spinner) findViewById(R.id.spImgSize);
-        spImgColor = (Spinner) findViewById(R.id.spImgColor);
-        spImgType = (Spinner) findViewById(R.id.spImgType);
-        etImgSite = (EditText) findViewById(R.id.etImgSite);
+        spImgSize = (Spinner) view.findViewById(R.id.spImgSize);
+        spImgColor = (Spinner) view.findViewById(R.id.spImgColor);
+        spImgType = (Spinner) view.findViewById(R.id.spImgType);
+
+        etImgSite = (EditText) view.findViewById(R.id.etImgSite);
+
+        ImageButton btnBack = (ImageButton) view.findViewById(R.id.btnBack);
+        Button btnSearch = (Button) view.findViewById(R.id.btnSearch);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AdvSearchDialogListener listener = (AdvSearchDialogListener) getActivity();
+                if (!(etImgSite.getText().toString().isEmpty())) {
+                    filters.setSite(etImgSite.getText().toString());
+                }
+                listener.onFinishAdvSearchDialog(filters);
+                dismiss();
+            }
+        });
 
         // Create adapters
-        adapterImgSize = ArrayAdapter.createFromResource(this,
+        adapterImgSize = ArrayAdapter.createFromResource(getActivity(),
                 R.array.img_sizes, android.R.layout.simple_spinner_item);
-        adapterImgColor = ArrayAdapter.createFromResource(this,
+        adapterImgColor = ArrayAdapter.createFromResource(getActivity(),
                 R.array.img_colors, android.R.layout.simple_spinner_item);
-        adapterImgType = ArrayAdapter.createFromResource(this,
+        adapterImgType = ArrayAdapter.createFromResource(getActivity(),
                 R.array.img_types, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
@@ -74,6 +114,9 @@ public class AdvancedSearchActivity extends ActionBarActivity {
         spImgType.setAdapter(adapterImgType);
 
         // Populate the spinners with the previous selections
+        filters = new ImageFiltersParcelable();
+        filters.copyFilters((ImageFiltersParcelable) getArguments().
+                                               getParcelable(Constants.inFilters));
         if (filters.getSize() != null)
             spImgSize.setSelection(adapterImgSize.getPosition(filters.getSize()));
         if (filters.getColor() != null)
@@ -90,7 +133,6 @@ public class AdvancedSearchActivity extends ActionBarActivity {
 
     }
 
-    // Method to set up listeners on the spinners
     private void setupViewListeners() {
         spImgSize.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -138,40 +180,4 @@ public class AdvancedSearchActivity extends ActionBarActivity {
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_advanced_search, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // On click action for the search button
-    public void onImageSearch(View v) {
-
-        if (!(etImgSite.getText().toString().isEmpty())) {
-            filters.setSite(etImgSite.getText().toString());
-        }
-
-        Intent i = new Intent(AdvancedSearchActivity.this, MainActivity.class);
-        i.putExtra(Constants.newFilters, filters);
-
-        setResult(RESULT_OK, i);
-        finish();
-    }
 }

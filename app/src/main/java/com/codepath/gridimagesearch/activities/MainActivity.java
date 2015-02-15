@@ -14,10 +14,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import com.codepath.gridimagesearch.adapters.ImageResultsAdapter;
+import com.codepath.gridimagesearch.fragments.AdvSearchDialog;
 import com.codepath.gridimagesearch.helpers.Constants;
 import com.codepath.gridimagesearch.helpers.EndlessScrollListener;
 import com.codepath.gridimagesearch.helpers.ImageFiltersParcelable;
@@ -35,14 +35,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements
+        AdvSearchDialog.AdvSearchDialogListener{
 
     // Edit: No longer needed because we're using SearchView
     //private EditText etSearchQuery;
     private StaggeredGridView gvImages;
     private ArrayList<ImageResultParcelable> imageResults;
     private ImageResultsAdapter imageResultsAdapter;
-    private final int ADV_SEARCH_REQ_CODE = 7;
     private String query = null;
     private ImageFiltersParcelable q_filters;
 
@@ -50,6 +50,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Setting this up because otherwise the progress bar starts acting and it looks weird
+        query = Constants.defaultQuery;
         q_filters = new ImageFiltersParcelable();
         setupViews();
     }
@@ -60,10 +63,8 @@ public class MainActivity extends ActionBarActivity {
         // etSearchQuery = (EditText) findViewById(R.id.etSearchQuery);
         gvImages = (StaggeredGridView) findViewById(R.id.gvImages);
         imageResults = new ArrayList<ImageResultParcelable>();
-        imageResultsAdapter = new ImageResultsAdapter(this, imageResults);
+        imageResultsAdapter = new ImageResultsAdapter(MainActivity.this, imageResults);
         gvImages.setAdapter(imageResultsAdapter);
-
-
 
         setupViewListeners();
     }
@@ -76,7 +77,7 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ImageResultParcelable curr_image = imageResults.get(position);
                 Intent i = new Intent(MainActivity.this, ImageDetailActivity.class);
-                i.putExtra("current_image", curr_image);
+                i.putExtra(Constants.curr_image_extra, curr_image);
                 startActivity(i);
             }
         });
@@ -111,11 +112,17 @@ public class MainActivity extends ActionBarActivity {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        // When a user submits a query on the action bar search view, invoke this.
         searchView.setOnQueryTextListener(new OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String q) {
                 query = q;
-                imageResultsAdapter.clear();
+                // Edit: We're back to clearing the arraylist because we're no longer extending
+                // the ArrayAdapter, but a generic adapter
+                //imageResultsAdapter.clear();
+                imageResults.clear();
+                imageResultsAdapter.notifyDataSetChanged();
                 q_filters.reset();
                 getSearchImages(query, q_filters, 0);
                 return true;
@@ -129,6 +136,8 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    // Method to decide the course of action to take when a user selects an action from the
+    // action bar.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -137,14 +146,39 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         // If the settings icon is clicked
-        if (id == R.id.search_settings) {
+        // Edit: This stub is no longer needed because the activity was replaced with a light-weight
+        // modal overlay.
+        /*if (id == R.id.search_settings) {
             Intent i = new Intent(MainActivity.this, AdvancedSearchActivity.class);
-            i.putExtra("advanced_filters", q_filters);
+            i.putExtra(Constants.inFilters, q_filters);
             startActivityForResult(i, ADV_SEARCH_REQ_CODE);
+        }*/
+        if (id == R.id.search_settings) {
+            showAdvSearchDialog(q_filters);
         }
 
-
         return super.onOptionsItemSelected(item);
+    }
+
+    // This is the method that's called when the settings action is selected on the MainActivity.
+    // This generates a dialog with advanced search filters.
+    private void showAdvSearchDialog(ImageFiltersParcelable inFilters) {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        AdvSearchDialog advSearchDialog = AdvSearchDialog.newInstance(inFilters);
+        advSearchDialog.show(fm, Constants.advSearchDialogTag);
+    }
+
+    // This is the callback method for when the Search button is hit on the advancedSearchDialog.
+    public void onFinishAdvSearchDialog(ImageFiltersParcelable newFilters) {
+        q_filters.copyFilters(newFilters);
+
+        // since this is a new query
+        // Edit: We're now clearing the arrayList instead of the adapter because imageResultsAdapter
+        // is no longer extending ArrayAdapter, but our generic adapter for loading bar.
+        //imageResultsAdapter.clear();
+        imageResults.clear();
+        imageResultsAdapter.notifyDataSetChanged();
+        getSearchImages(query, q_filters, 0);
     }
 
     // This method determines if the mobile device is connected to the internet
@@ -161,6 +195,7 @@ public class MainActivity extends ActionBarActivity {
         return false;
     }
 
+    // This method determines if the mobile device is connected to the internet
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -168,34 +203,40 @@ public class MainActivity extends ActionBarActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
+    // Edit: This method is used when we return to MainActivity from another activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // REQUEST_CODE is defined above
-        if (resultCode == RESULT_OK && requestCode == ADV_SEARCH_REQ_CODE) {
+        // Check if we're back from the Advanced Search activity
+        if (resultCode == RESULT_OK && requestCode == Constants.ADV_SEARCH_REQ_CODE) {
             // Extract advanced filters from result extras
-            q_filters.copyFilters((ImageFiltersParcelable) data.getParcelableExtra("advanced_filters"));
+            q_filters.copyFilters((ImageFiltersParcelable) data.getParcelableExtra(
+                                                                            Constants.newFilters));
 
             // since this is a new query
-            imageResultsAdapter.clear();
+            // Edit: we're clearing the array list directly because ImageResultsAdapter no longer
+            // extends ArrayAdapter. It extends BaseAdapter which doesn't have clear/addAll
+            // functionality
+            //imageResultsAdapter.clear();
+            imageResults.clear();
+            imageResultsAdapter.notifyDataSetChanged();
             getSearchImages(query, q_filters, 0);
         }
     }
 
+    // Method to call the Google API with the main query, advanced filters, and
+    // the page (for scrolling)
     private void getSearchImages(final String query,
                                  ImageFiltersParcelable curr_filters,
                                  int page) {
-        String appender = "&";
-        String pageKey = "start=";
 
         q_filters.copyFilters(curr_filters);
 
-        String queryKey = "q=";
 
-        // Add the query to the page
-        StringBuilder urlBuilder = new StringBuilder().append(appender + queryKey + query);
-        urlBuilder.append(appender + pageKey + (page * Constants.RESULT_SIZE));
-
+        StringBuilder urlBuilder = new StringBuilder();
+        // Add the query to the url
+        urlBuilder.append(Constants.appender).append(Constants.queryKey).append(query);
+        urlBuilder.append(Constants.appender).append(Constants.pageKey).append(page * Constants.RESULT_SIZE);
         urlBuilder.append(q_filters.getQuery());
 
         String url = urlBuilder.toString();
@@ -205,20 +246,25 @@ public class MainActivity extends ActionBarActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
-        if (isNetworkAvailable()) {
+        if (isNetworkAvailable() && query != null) {
             GoogleImgSearchRestClient.get(url, null, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     try {
-                        JSONArray imageResultsJSON = response.getJSONObject("responseData")
-                                .getJSONArray("results");
+                        JSONArray imageResultsJSON = response.getJSONObject(Constants.gAPIJSONRoot)
+                                .getJSONArray(Constants.gAPIJSONImgArrayKey);
 
                         // Edit: no longer needed because we're using SearchView
                         /*etSearchQuery.setText("");
                         etSearchQuery.append(query);
                         etSearchQuery.requestFocus();*/
 
-                        imageResultsAdapter.addAll(ImageResultParcelable.fromJSONArray(imageResultsJSON));
+                        //Edit: we're adding to the array list  because ImageResultsAdapter no longer
+                        // extends ArrayAdapter. It extends BaseAdapter which doesn't have clear/addAll
+                        // functionality
+                        imageResults.addAll(ImageResultParcelable.fromJSONArray(imageResultsJSON));
+                        imageResultsAdapter.notifyDataSetChanged();
+                        //imageResultsAdapter.addAll(ImageResultParcelable.fromJSONArray(imageResultsJSON));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

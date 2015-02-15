@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -25,13 +24,16 @@ import android.provider.MediaStore.Images;
 import android.widget.Toast;
 
 import com.codepath.gridimagesearch.R;
+import com.codepath.gridimagesearch.helpers.Constants;
 import com.codepath.gridimagesearch.helpers.ImageResultParcelable;
+import com.codepath.gridimagesearch.helpers.TouchImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Callback;
 
 public class ImageDetailActivity extends ActionBarActivity {
 
-    private ImageView ivFullImg;
+    // TouchImageView for zoom and pan
+    private TouchImageView ivFullImg;
     private ImageView ivBg;
     private TextView tvTitle;
     private ShareActionProvider miShareAction;
@@ -41,18 +43,18 @@ public class ImageDetailActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
-        ivFullImg = (ImageView) findViewById(R.id.ivFullImg);
+        ivFullImg = (TouchImageView) findViewById(R.id.ivFullImg);
         ivBg = (ImageView) findViewById(R.id.ivBg);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
-        ImageResultParcelable curr_image = (ImageResultParcelable)
-                                                    getIntent().getParcelableExtra("current_image");
+        ImageResultParcelable curr_image = getIntent().getParcelableExtra(Constants.curr_image_extra);
 
         //tvTitle.setText(Html.fromHtml(curr_image.getTitle()));
 
         int aspectRatio = curr_image.getWidth() / curr_image.getHeight();
 
-        // This piece of code gets the display width, which is sufficient because we know we've
-        // set ivPhoto's width to match_parent.
+        // This piece of code gets the display width, and height. It tries to do some aspect ratio
+        // maintenance to get the largest possible good image if the image's real width and/or height
+        // are > screen width/height
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
@@ -72,19 +74,21 @@ public class ImageDetailActivity extends ActionBarActivity {
             targetWidth = aspectRatio * targetHeight;
         }
         Picasso.with(this).load(curr_image.getUrl()).into(ivBg);
-        Picasso.with(this).load(curr_image.getUrl()).resize(targetWidth, targetHeight).
+        Picasso.with(this).
+                load(curr_image.getUrl()).resize(targetWidth, targetHeight).
+                placeholder(getResources().getDrawable(R.drawable.loading)).
                 into(ivFullImg, new Callback() {
-            @Override
-            public void onSuccess() {
-                // Setup share intent now that image has loaded
-                setupShareIntent();
-            }
+                    @Override
+                    public void onSuccess() {
+                        // Setup share intent now that image has loaded
+                        setupShareIntent();
+                    }
 
-            @Override
-            public void onError() {
-                // ...
-            }
-        });
+                    @Override
+                    public void onError() {
+                        // ...
+                    }
+                });
     }
 
     private Uri getLocalBitmapUri() {
@@ -93,24 +97,15 @@ public class ImageDetailActivity extends ActionBarActivity {
 
 
         Drawable mDrawable = ivFullImg.getDrawable();
-        if (mDrawable == null)
-            Log.i("eee", "mdrawable is null");
         Bitmap immutableBitmap = ((BitmapDrawable)mDrawable).getBitmap();
-        if (immutableBitmap == null)
-            Log.i("eee", "immutableBitmap is null");
-        /*Bitmap mutableBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
-        if (mutableBitmap == null) {
-            Log.i("eee", "mutablebitmap is null");
-        }
+        Bitmap mutableBitmap = immutableBitmap.copy(Bitmap.Config.ARGB_8888, true);
 
-        view.draw(new Canvas(mutableBitmap));*/
+        view.draw(new Canvas(mutableBitmap));
 
         String path = Images.Media.insertImage(ImageDetailActivity.this.getContentResolver(),
                 immutableBitmap, tvTitle.getText().toString(), null);
-        Log.i("eee", path);
 
-        Uri uri = Uri.parse(path);
-        return uri;
+        return Uri.parse(path);
     }
 
     public void setupShareIntent() {
@@ -120,7 +115,7 @@ public class ImageDetailActivity extends ActionBarActivity {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-            shareIntent.setType("image/*");
+            shareIntent.setType(Constants.intent_type_for_img);
 
             // Attach share event to the menu item provider
             miShareAction.setShareIntent(shareIntent);
@@ -155,9 +150,6 @@ public class ImageDetailActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-        if (id == R.id.menu_item_share) {
-
         }
 
         return super.onOptionsItemSelected(item);

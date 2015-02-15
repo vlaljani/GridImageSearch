@@ -3,7 +3,6 @@ package com.codepath.gridimagesearch.helpers;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.codepath.gridimagesearch.models.ImageResult;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +12,8 @@ import java.util.ArrayList;
 
 /**
  * Created by vibhalaljani on 2/14/15.
+ *
+ * Parcelable for ImageResult so they can be passed around in intents and bundles
  */
 public class ImageResultParcelable implements Parcelable {
 

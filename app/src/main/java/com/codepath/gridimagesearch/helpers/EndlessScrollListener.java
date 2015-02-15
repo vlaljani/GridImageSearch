@@ -5,6 +5,10 @@ import android.widget.AbsListView.OnScrollListener;
 
 /**
  * Created by vibhalaljani on 2/14/15.
+ *
+ * Class to support Endless / Infinite scrolling.
+ *
+ * Borrowed from http://guides.codepath.com/android/Endless-Scrolling-with-AdapterViews
  */
 public abstract class EndlessScrollListener implements OnScrollListener {
     // The minimum amount of items to have below your current scroll position
