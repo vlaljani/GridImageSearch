@@ -22,6 +22,7 @@ Completed user stories:
        - Attempted to maintain the aspect ratio of the image when it is being shown in full screen (if its original width and/or height are greater than screen width/height) 
  * [x] Bonus: Use the [StaggeredGridView](https://github.com/f-barth/AndroidStaggeredGrid) to display improve the grid of image results
  * [x] Bonus: User can [zoom or pan images](https://github.com/MikeOrtiz/TouchImageView) displayed in full-screen detail view
+ * Used Parcelable instead of Serializables for passing complex objects in bundles and intents 
  
 Libraries that helped make the project easier :-)
 
