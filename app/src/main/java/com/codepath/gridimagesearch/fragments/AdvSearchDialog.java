@@ -17,6 +17,9 @@ import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.helpers.Constants;
 import com.codepath.gridimagesearch.helpers.ImageFiltersParcelable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Created by vibhalaljani on 2/15/15.
@@ -24,6 +27,42 @@ import com.codepath.gridimagesearch.helpers.ImageFiltersParcelable;
  * Fragment dialog for advanced search
  */
 public class AdvSearchDialog extends DialogFragment {
+
+    private static final HashMap<Integer, String> SIZES;
+    private static final HashMap<Integer, String> COLORS;
+    private static final HashMap<Integer, String> TYPES;
+
+    static {
+        SIZES = new HashMap<>();
+        SIZES.put(0, "icon");
+        SIZES.put(1, "small");
+        SIZES.put(2, "medium");
+        SIZES.put(3, "large");
+        SIZES.put(4, "xlarge");
+        SIZES.put(5, "xxlarge");
+        SIZES.put(6, "huge");
+
+        COLORS = new HashMap<>();
+        COLORS.put(0, "black");
+        COLORS.put(1, "blue");
+        COLORS.put(2, "brown");
+        COLORS.put(3, "gray");
+        COLORS.put(4, "green");
+        COLORS.put(5, "orange");
+        COLORS.put(6, "pink");
+        COLORS.put(7, "purple");
+        COLORS.put(8, "red");
+        COLORS.put(9, "teal");
+        COLORS.put(10, "white");
+        COLORS.put(11, "yellow");
+
+        TYPES = new HashMap<>();
+        TYPES.put(0, "face");
+        TYPES.put(1, "photo");
+        TYPES.put(2, "clipart");
+        TYPES.put(3, "lineart");
+    }
+
     private Spinner spImgSize;
     private Spinner spImgColor;
     private Spinner spImgType;
@@ -34,6 +73,7 @@ public class AdvSearchDialog extends DialogFragment {
     private ArrayAdapter<CharSequence> adapterImgType;
 
     private ImageFiltersParcelable filters;
+
 
     public AdvSearchDialog() {
         // Empty constructor required for DialogFragment
@@ -65,7 +105,6 @@ public class AdvSearchDialog extends DialogFragment {
     }
 
     private void setupViews(View view) {
-
 
         // Find views
         spImgSize = (Spinner) view.findViewById(R.id.spImgSize);
@@ -141,7 +180,7 @@ public class AdvSearchDialog extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String size = (String) parent.getItemAtPosition(position);
                 if (!size.equals(getResources().getString(R.string.no_filter))) {
-                    filters.setSize(size);
+                    filters.setSize(SIZES.get(position - 1));
                 } else {
                     filters.setSize(null);
                 }
@@ -158,7 +197,7 @@ public class AdvSearchDialog extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String color = (String) parent.getItemAtPosition(position);
                 if (!color.equals(getResources().getString(R.string.no_filter))) {
-                    filters.setColor(color);
+                    filters.setColor(COLORS.get(position - 1));
                 } else {
                     filters.setColor(null);
                 }
@@ -175,7 +214,7 @@ public class AdvSearchDialog extends DialogFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String type = (String) parent.getItemAtPosition(position);
                 if (!type.equals(getResources().getString(R.string.no_filter))) {
-                    filters.setType(type);
+                    filters.setType(TYPES.get(position - 1));
                 } else {
                     filters.setType(null);
                 }
