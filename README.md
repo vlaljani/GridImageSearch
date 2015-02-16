@@ -40,4 +40,7 @@ Video Walk Through:
 Wasn't able to show Sharing via the emulator. So showing the below gif from my phone: 
 ![Sharing](ImageSharing.gif)
 
+Walkthrough for the zoom also from phone:
+![Zoom](Zoom.gif)
+
 
