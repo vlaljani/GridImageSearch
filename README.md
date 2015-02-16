@@ -34,6 +34,6 @@ Libraries that helped make the project easier :-)
 
 Video Walk Through: 
 
-[VideoWalkThrough](VideoWalkThroughForGridImgSearch.gif)
+![VideoWalkThrough](VideoWalkThroughForGridImgSearch.gif)
 
 
