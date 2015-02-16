@@ -23,6 +23,7 @@ Completed user stories:
  * [x] Bonus: Use the [StaggeredGridView](https://github.com/f-barth/AndroidStaggeredGrid) to display improve the grid of image results
  * [x] Bonus: User can [zoom or pan images](https://github.com/MikeOrtiz/TouchImageView) displayed in full-screen detail view
  * Used Parcelable instead of Serializables for passing complex objects in bundles and intents 
+ * Tried to handle spinners/string arrays, so that we do not end up passing query filters in languages other than English (because I wasn't sure if that's supported - per the API docs) 
  
 Libraries that helped make the project easier :-)
 
