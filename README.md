@@ -36,4 +36,7 @@ Video Walk Through:
 
 ![VideoWalkThrough](VideoWalkThroughForGridImgSearch.gif)
 
+Wasn't able to show Sharing via the emulator. So showing the below gif from my phone: 
+![Sharing](ImageSharing.gif)
+
 
