@@ -32,4 +32,8 @@ Libraries that helped make the project easier :-)
 
 [StaggeredGridView](https://github.com/f-barth/AndroidStaggeredGrid) to make the GridView cleaner
 
+Video Walk Through: 
+
+[VideoWalkThrough](VideoWalkThroughForGridImgSearch.gif)
+
 
