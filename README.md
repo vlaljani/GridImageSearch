@@ -27,7 +27,9 @@ Completed user stories:
 Libraries that helped make the project easier :-)
 
 [Android async-http](http://loopj.com/android-async-http/) to make calls to the Google API
+
 [Picasso](http://square.github.io/picasso/) to help load the images
+
 [StaggeredGridView](https://github.com/f-barth/AndroidStaggeredGrid) to make the GridView cleaner
 
 
