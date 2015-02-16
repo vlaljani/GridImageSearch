@@ -89,6 +89,8 @@ public class AdvSearchDialog extends DialogFragment {
                 AdvSearchDialogListener listener = (AdvSearchDialogListener) getActivity();
                 if (!(etImgSite.getText().toString().isEmpty())) {
                     filters.setSite(etImgSite.getText().toString());
+                } else {
+                    filters.setSite(null);
                 }
                 listener.onFinishAdvSearchDialog(filters);
                 dismiss();
@@ -140,6 +142,8 @@ public class AdvSearchDialog extends DialogFragment {
                 String size = (String) parent.getItemAtPosition(position);
                 if (!size.equals(getResources().getString(R.string.no_filter))) {
                     filters.setSize(size);
+                } else {
+                    filters.setSize(null);
                 }
             }
 
@@ -155,6 +159,8 @@ public class AdvSearchDialog extends DialogFragment {
                 String color = (String) parent.getItemAtPosition(position);
                 if (!color.equals(getResources().getString(R.string.no_filter))) {
                     filters.setColor(color);
+                } else {
+                    filters.setColor(null);
                 }
             }
 
@@ -170,6 +176,8 @@ public class AdvSearchDialog extends DialogFragment {
                 String type = (String) parent.getItemAtPosition(position);
                 if (!type.equals(getResources().getString(R.string.no_filter))) {
                     filters.setType(type);
+                } else {
+                    filters.setType(null);
                 }
             }
 

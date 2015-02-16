@@ -176,6 +176,7 @@ public class MainActivity extends ActionBarActivity implements
         // Edit: We're now clearing the arrayList instead of the adapter because imageResultsAdapter
         // is no longer extending ArrayAdapter, but our generic adapter for loading bar.
         //imageResultsAdapter.clear();
+        Log.i("WHA", "goes here");
         imageResults.clear();
         imageResultsAdapter.notifyDataSetChanged();
         getSearchImages(query, q_filters, 0);
@@ -246,6 +247,7 @@ public class MainActivity extends ActionBarActivity implements
                     Toast.LENGTH_SHORT).show();
         }
 
+        Log.i("WHA", urlBuilder.toString());
         if (isNetworkAvailable() && query != null) {
             GoogleImgSearchRestClient.get(url, null, new JsonHttpResponseHandler() {
                 @Override

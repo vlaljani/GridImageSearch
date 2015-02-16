@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.codepath.gridimagesearch.R;
 import com.codepath.gridimagesearch.helpers.ImageResultParcelable;
+import com.etsy.android.grid.util.DynamicHeightImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
